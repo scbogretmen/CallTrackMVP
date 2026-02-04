@@ -1,0 +1,64 @@
+@model CallLog
+@{
+    ViewData["Title"] = "Çağrı Detayı";
+}
+<h1 class="mb-4">Çağrı Detayı</h1>
+<dl class="row">
+    <dt class="col-sm-3">Sıra No</dt>
+    <dd class="col-sm-9">@Model.SiraNo</dd>
+
+    <dt class="col-sm-3">Çağrı No</dt>
+    <dd class="col-sm-9">@Model.CagriNo</dd>
+
+    <dt class="col-sm-3">Çağrı Türü</dt>
+    <dd class="col-sm-9">@Model.CagriTuru</dd>
+
+    <dt class="col-sm-3">Teknisyen Adı</dt>
+    <dd class="col-sm-9">@Model.TeknisyenAdi</dd>
+
+    <dt class="col-sm-3">Tarih</dt>
+    <dd class="col-sm-9">@Model.Tarih.ToString("dd.MM.yyyy")</dd>
+
+    <dt class="col-sm-3">Mevcut Çağrı Saati</dt>
+    <dd class="col-sm-9">@Model.MevcutCagriSaat</dd>
+
+    <dt class="col-sm-3">Oluşturan</dt>
+    <dd class="col-sm-9">@Model.CreatedByUser?.FullName</dd>
+
+    <dt class="col-sm-3">Oluşturulma Tarihi</dt>
+    <dd class="col-sm-9">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+</dl>
+@if (ViewBag.HasUnreadUpdates == true)
+{
+    <div class="alert alert-warning d-flex align-items-center justify-content-between mb-4" role="alert">
+        <span>Bu kayıtta okunmamış güncellemeler var.</span>
+        <form asp-action="AcknowledgeUpdates" asp-route-id="@Model.Id" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-warning btn-sm">Okudum</button>
+        </form>
+    </div>
+}
+@if (Model.Updates?.Any() == true)
+{
+    <h5 class="mt-4 mb-3">Güncelleme Geçmişi</h5>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead class="table-light"><tr><th>Tarih</th><th>Saat</th><th>Güncelleme Nedeni</th></tr></thead>
+            <tbody>
+                @foreach (var u in Model.Updates)
+                {
+                    <tr>
+                        <td>@u.GuncellenenTarih.ToString("dd.MM.yyyy")</td>
+                        <td>@u.GuncellenenCagriSaat</td>
+                        <td>@u.GuncellemeNedeni</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Sil</a>
+    <a asp-action="Index" class="btn btn-secondary">Listeye Dön</a>
+</div>

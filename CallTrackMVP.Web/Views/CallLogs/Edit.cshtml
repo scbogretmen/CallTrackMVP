@@ -1,0 +1,102 @@
+@model CallLog
+@{
+    ViewData["Title"] = "Çağrı Düzenle";
+}
+<h1 class="mb-4">Çağrı Düzenle</h1>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CreatedByUserId" />
+    <input type="hidden" asp-for="CreatedAt" />
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="SiraNo" class="form-label"></label>
+            <input asp-for="SiraNo" class="form-control" type="number" />
+            <span asp-validation-for="SiraNo" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="CagriNo" class="form-label"></label>
+            <input asp-for="CagriNo" class="form-control" />
+            <span asp-validation-for="CagriNo" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="CagriTuru" class="form-label"></label>
+            <select asp-for="CagriTuru" class="form-select">
+                @foreach (var ct in ViewBag.CallTypes as IEnumerable<CallType> ?? Enumerable.Empty<CallType>())
+                {
+                    <option value="@ct.Name">@ct.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CagriTuru" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="TeknisyenAdi" class="form-label"></label>
+            <input asp-for="TeknisyenAdi" class="form-control" />
+            <span asp-validation-for="TeknisyenAdi" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Tarih" class="form-label"></label>
+            <input asp-for="Tarih" class="form-control" type="date" />
+            <span asp-validation-for="Tarih" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="MevcutCagriSaat" class="form-label"></label>
+            <input asp-for="MevcutCagriSaat" class="form-control" type="time" />
+            <span asp-validation-for="MevcutCagriSaat" class="text-danger"></span>
+        </div>
+    </div>
+    <hr class="my-4" />
+    <h5 class="mb-3">Yeni Güncelleme Ekle (Opsiyonel)</h5>
+    <p class="text-muted small mb-3">Güncelleme eklemek istiyorsanız aşağıdaki üç alanı da doldurun. Birden fazla güncelleme eklenebilir.</p>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="GuncellenenTarih" class="form-label"></label>
+            <input asp-for="GuncellenenTarih" class="form-control" type="date" />
+            <span asp-validation-for="GuncellenenTarih" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="GuncellenenCagriSaat" class="form-label"></label>
+            <input asp-for="GuncellenenCagriSaat" class="form-control" type="time" />
+            <span asp-validation-for="GuncellenenCagriSaat" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="GuncellemeNedeni" class="form-label"></label>
+        <textarea asp-for="GuncellemeNedeni" class="form-control" rows="2"></textarea>
+        <span asp-validation-for="GuncellemeNedeni" class="text-danger"></span>
+    </div>
+    @{
+        var updates = ViewBag.Updates as IEnumerable<CallLogUpdate> ?? Model.Updates ?? Enumerable.Empty<CallLogUpdate>();
+    }
+    @if (updates.Any())
+    {
+        <hr class="my-4" />
+        <h5 class="mb-3">Geçmiş Güncellemeler</h5>
+        <div class="table-responsive mb-4">
+            <table class="table table-sm table-bordered">
+                <thead><tr><th>Tarih</th><th>Saat</th><th>Neden</th></tr></thead>
+                <tbody>
+                    @foreach (var u in updates)
+                    {
+                        <tr>
+                            <td>@u.GuncellenenTarih.ToString("dd.MM.yyyy")</td>
+                            <td>@u.GuncellenenCagriSaat</td>
+                            <td>@u.GuncellemeNedeni</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <div>
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

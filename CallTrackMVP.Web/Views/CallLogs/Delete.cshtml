@@ -1,0 +1,24 @@
+@model CallLog
+@{
+    ViewData["Title"] = "Kayıt Sil";
+}
+<h1 class="mb-4 text-danger">Kayıt Sil</h1>
+<div class="alert alert-warning">
+    Bu kaydı silmek istediğinizden emin misiniz?
+</div>
+<dl class="row">
+    <dt class="col-sm-3">Sıra No</dt>
+    <dd class="col-sm-9">@Model.SiraNo</dd>
+    <dt class="col-sm-3">Çağrı No</dt>
+    <dd class="col-sm-9">@Model.CagriNo</dd>
+    <dt class="col-sm-3">Teknisyen</dt>
+    <dd class="col-sm-9">@Model.TeknisyenAdi</dd>
+    <dt class="col-sm-3">Tarih</dt>
+    <dd class="col-sm-9">@Model.Tarih.ToString("dd.MM.yyyy")</dd>
+</dl>
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>

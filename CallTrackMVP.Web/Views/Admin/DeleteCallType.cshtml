@@ -1,0 +1,30 @@
+@model CallType
+@{
+    ViewData["Title"] = "Çağrı Türü Sil";
+    var inUse = ViewBag.InUse == true;
+}
+<h1 class="mb-4 text-danger">Çağrı Türü Sil</h1>
+@if (inUse)
+{
+    <div class="alert alert-warning">Bu çağrı türü kullanılıyor, silinemez.</div>
+}
+else
+{
+    <div class="alert alert-warning">"@Model.Name" çağrı türünü silmek istediğinizden emin misiniz?</div>
+}
+<dl class="row">
+    <dt class="col-sm-2">Çağrı Türü</dt>
+    <dd class="col-sm-10">@Model.Name</dd>
+</dl>
+@if (!inUse)
+{
+    <form asp-action="DeleteCallType" asp-route-id="@Model.Id" method="post">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-danger">Evet, Sil</button>
+        <a asp-action="CallTypes" class="btn btn-secondary">İptal</a>
+    </form>
+}
+else
+{
+    <a asp-action="CallTypes" class="btn btn-secondary">Geri Dön</a>
+}

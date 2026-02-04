@@ -1,0 +1,20 @@
+@model CallType
+@{
+    ViewData["Title"] = "Yeni Çağrı Türü";
+}
+<div class="admin-header px-4">
+    <h1>➕ Yeni Çağrı Türü</h1>
+    <p class="mb-0 opacity-75 small">Yeni çağrı türü tanımlayın</p>
+</div>
+<form asp-action="CreateCallType" method="post" class="form-card card">
+    <div class="card-body">
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Çağrı Türü Adı</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-ct-primary">Kaydet</button>
+    <a asp-action="CallTypes" class="btn btn-outline-secondary">İptal</a>
+    </div>
+</form>
