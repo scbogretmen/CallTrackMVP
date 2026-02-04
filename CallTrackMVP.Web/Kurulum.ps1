@@ -96,11 +96,24 @@ try {
 # Bir kac saniye bekleyip tarayici ac
 Start-Sleep -Seconds 2
 $Url = "http://localhost:$KullanilacakPort"
+$LocalIPs = @()
+try {
+    $LocalIPs = (Get-NetIPAddress -AddressFamily IPv4 -ErrorAction SilentlyContinue | Where-Object { $_.IPAddress -notlike "127.*" -and $_.InterfaceAlias -notlike "*Loopback*" }).IPAddress
+} catch { }
 Write-Host ""
 Write-Host "Kurulum tamamlandi." -ForegroundColor Green
 Write-Host "Tarayicida aciliyor: $Url" -ForegroundColor Cyan
-Write-Host "Bu bilgisayardan: $Url" -ForegroundColor White
-Write-Host "Agdaki diger bilgisayarlardan: http://<bu-bilgisayarin-ip-adresi>:$KullanilacakPort" -ForegroundColor White
+Write-Host ""
+Write-Host "--- Erisim Adresleri ---" -ForegroundColor Cyan
+Write-Host "Sunucudan (bu bilgisayar): $Url" -ForegroundColor White
+if ($LocalIPs.Count -gt 0) {
+    Write-Host "Agdan (LAN) - diger bilgisayarlar su adreslerden baglanabilir:" -ForegroundColor White
+    foreach ($ip in $LocalIPs) {
+        Write-Host "  http://${ip}:$KullanilacakPort" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "Agdan (LAN): http://<bu-bilgisayarin-ip-adresi>:$KullanilacakPort (ipconfig ile IP ogrenin)" -ForegroundColor Yellow
+}
 Write-Host ""
 Start-Process $Url
 

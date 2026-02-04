@@ -41,7 +41,12 @@
                 {
                     <tr>
                         <td>@t.Name</td>
-                        <td><a asp-action="DeleteCallType" asp-route-id="@t.Id" class="btn btn-sm btn-outline-danger" aria-label="Çağrı türünü sil">Sil</a></td>
+                        <td>
+                            <div class="btn-group-actions">
+                                <a asp-action="EditCallType" asp-route-id="@t.Id" class="btn btn-sm btn-outline-warning" aria-label="Düzenle">Düzenle</a>
+                                <a asp-action="DeleteCallType" asp-route-id="@t.Id" class="btn btn-sm btn-outline-danger" aria-label="Sil">Sil</a>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>

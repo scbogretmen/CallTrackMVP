@@ -184,6 +184,50 @@ public class AdminController : Controller
     [HttpGet]
     public IActionResult CreateCallType() => View(new CallType());
 
+    [HttpGet]
+    public async Task<IActionResult> EditCallType(int id, CancellationToken cancellationToken = default)
+    {
+        var type = await _db.CallTypes.FindAsync(new object[] { id }, cancellationToken);
+        if (type == null)
+            return NotFound();
+        return View(type);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditCallType(int id, CallType model, CancellationToken cancellationToken = default)
+    {
+        var type = await _db.CallTypes.FindAsync(new object[] { id }, cancellationToken);
+        if (type == null)
+            return NotFound();
+
+        var newName = model.Name?.Trim() ?? "";
+        if (string.IsNullOrEmpty(newName))
+        {
+            ModelState.AddModelError(nameof(model.Name), "Çağrı türü adı zorunludur.");
+        }
+        else if (newName != type.Name && await _db.CallTypes.AnyAsync(t => t.Name == newName, cancellationToken))
+        {
+            ModelState.AddModelError(nameof(model.Name), "Bu çağrı türü zaten mevcut.");
+        }
+
+        if (ModelState.IsValid)
+        {
+            var oldName = type.Name;
+            type.Name = newName;
+            if (oldName != newName)
+            {
+                var logsToUpdate = await _db.CallLogs.Where(c => c.CagriTuru == oldName).ToListAsync(cancellationToken);
+                foreach (var log in logsToUpdate)
+                    log.CagriTuru = newName;
+            }
+            await _db.SaveChangesAsync(cancellationToken);
+            TempData["Success"] = "Çağrı türü güncellendi.";
+            return RedirectToAction(nameof(CallTypes));
+        }
+        return View(model);
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateCallType(CallType model, CancellationToken cancellationToken = default)
