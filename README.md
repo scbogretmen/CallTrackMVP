@@ -36,7 +36,17 @@ cd CallTrackMVP
 - `CallTrackMVP.Web` projesini çalıştırın; tarayıcıda https://localhost:50201 açılır.
 - Veritabanı ilk çalıştırmada oluşturulur ve varsayılan kullanıcılar eklenir.
 
-### Kurulum EXE üretme
+### Publish klasörü oluşturma
+
+Proje kökünde:
+
+```powershell
+dotnet publish CallTrackMVP.Web\CallTrackMVP.Web.csproj -c Release -o Publish
+```
+
+Çıktı: `Publish` klasörü – Kurulum.bat ile kurulabilir.
+
+### Kurulum EXE oluşturma
 
 Proje kökünde PowerShell:
 
