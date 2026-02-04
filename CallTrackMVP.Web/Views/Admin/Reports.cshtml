@@ -1,0 +1,96 @@
+@model ReportsFilterViewModel
+@{
+    ViewData["Title"] = "Raporlar";
+    var items = ViewBag.Items as IEnumerable<CallLog> ?? Enumerable.Empty<CallLog>();
+    var filter = ViewBag.Filter as ReportsFilterViewModel ?? Model;
+}
+<div class="admin-header px-4">
+    <h1>📊 Raporlar</h1>
+    <p class="mb-0 opacity-75 small">Filtrelere göre çağrı kayıtlarını görüntüleyin ve Excel olarak indirin</p>
+</div>
+<form asp-action="Reports" method="get" class="admin-card card mb-4">
+    <div class="card-header">Filtreler</div>
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-2">
+                <label asp-for="TarihBaslangic" class="form-label"></label>
+                <input asp-for="TarihBaslangic" class="form-control" type="date" />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="TarihBitis" class="form-label"></label>
+                <input asp-for="TarihBitis" class="form-control" type="date" />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="TeknisyenAdi" class="form-label"></label>
+                <input asp-for="TeknisyenAdi" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <label asp-for="CagriTuru" class="form-label"></label>
+                <select asp-for="CagriTuru" class="form-select">
+                    <option value="">Tümü</option>
+                    @foreach (var ct in ViewBag.CallTypes as IEnumerable<CallType> ?? Enumerable.Empty<CallType>())
+                    {
+                        <option value="@ct.Name">@ct.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label asp-for="CagriNo" class="form-label"></label>
+                <input asp-for="CagriNo" class="form-control" />
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary me-2">Filtrele</button>
+                <a asp-action="Reports" class="btn btn-outline-secondary">Temizle</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form asp-action="ExportExcel" method="post" class="mb-4">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="TarihBaslangic" value="@filter.TarihBaslangic?.ToString("yyyy-MM-dd")" />
+    <input type="hidden" name="TarihBitis" value="@filter.TarihBitis?.ToString("yyyy-MM-dd")" />
+    <input type="hidden" name="TeknisyenAdi" value="@filter.TeknisyenAdi" />
+    <input type="hidden" name="CagriTuru" value="@filter.CagriTuru" />
+    <input type="hidden" name="CagriNo" value="@filter.CagriNo" />
+    <button type="submit" class="btn btn-success"><span class="d-inline-block me-1">📥</span> Excel İndir</button>
+</form>
+
+<p class="text-muted mb-3">Toplam <strong>@items.Count()</strong> kayıt</p>
+<div class="admin-card card">
+    <div class="table-responsive">
+        <table class="table admin-table mb-0">
+            <thead>
+            <tr>
+                <th>Sıra No</th>
+                <th>Çağrı No</th>
+                <th>Çağrı Türü</th>
+                <th>Teknisyen</th>
+                <th>Tarih</th>
+                <th>Mevcut Saat</th>
+                <th>Oluşturan</th>
+                <th>Güncelleme</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.SiraNo</td>
+                    <td>@item.CagriNo</td>
+                    <td>@item.CagriTuru</td>
+                    <td>@item.TeknisyenAdi</td>
+                    <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                    <td>@item.MevcutCagriSaat</td>
+                    <td>@item.CreatedByUser?.FullName</td>
+                    <td>@(item.Updates?.Count ?? 0)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+</div>
+@if (!items.Any())
+{
+    <p class="text-muted">Filtreye uygun kayıt bulunamadı.</p>
+}

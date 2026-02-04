@@ -1,0 +1,58 @@
+@model IEnumerable<CallLog>
+@{
+    ViewData["Title"] = "Çağrı Kayıtları";
+    var unreadIds = ViewBag.UnreadCallLogIds as HashSet<int> ?? new HashSet<int>();
+}
+<h1 class="page-title">Çağrı Kayıtları</h1>
+<p class="mb-4">
+    <a asp-action="Create" class="btn btn-ct-primary">+ Yeni Kayıt Ekle</a>
+</p>
+<div class="admin-card card">
+    <div class="table-responsive">
+        <table class="table admin-table mb-0">
+        <thead>
+            <tr>
+                <th>Sıra No</th>
+                <th>Çağrı No</th>
+                <th>Çağrı Türü</th>
+                <th>Teknisyen</th>
+                <th>Tarih</th>
+                <th>Mevcut Saat</th>
+                <th>Oluşturan</th>
+                <th>Güncelleme</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="@(unreadIds.Contains(item.Id) ? "table-warning" : "")">
+                    <td>@item.SiraNo</td>
+                    <td>@item.CagriNo</td>
+                    <td>@item.CagriTuru</td>
+                    <td>@item.TeknisyenAdi</td>
+                    <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                    <td>@item.MevcutCagriSaat</td>
+                    <td>@item.CreatedByUser?.FullName</td>
+                    <td>
+                        @(item.Updates?.Count ?? 0)
+                        @if (unreadIds.Contains(item.Id))
+                        {
+                            <span class="badge bg-warning text-dark ms-1" title="Okunmamış güncelleme var - Detaya gidip onaylayın">Güncellendi</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Detay</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Düzenle</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </div>
+</div>
+@if (!Model.Any())
+{
+    <p class="text-muted">Henüz kayıt bulunmuyor. Yeni kayıt eklemek için yukarıdaki butonu kullanın.</p>
+}

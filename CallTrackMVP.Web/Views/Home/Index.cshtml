@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+<h1 class="page-title">Çağrı Takip</h1>
+<div class="row g-4">
+    <div class="col-md-6">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small fw-semibold mb-2">Bugünkü Çağrılar</h6>
+                <p class="card-text display-6 text-primary mb-0">@ViewBag.TodayCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card dashboard-card">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase small fw-semibold mb-2">Bu Haftaki Çağrılar</h6>
+                <p class="card-text display-6 text-success mb-0">@ViewBag.WeekCount</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="mt-4">
+    <a asp-controller="CallLogs" asp-action="Create" class="btn btn-ct-primary btn-lg">+ Yeni Çağrı Ekle</a>
+    <a asp-controller="CallLogs" asp-action="Index" class="btn btn-outline-secondary btn-lg ms-2">Tüm Kayıtlar</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-controller="Admin" asp-action="Reports" class="btn btn-outline-secondary btn-lg ms-2">Raporlar</a>
+    }
+</div>

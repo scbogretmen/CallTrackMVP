@@ -1,0 +1,58 @@
+@model CallLog
+@{
+    ViewData["Title"] = "Yeni Çağrı Kaydı";
+}
+<h1 class="mb-4">Yeni Çağrı Kaydı</h1>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="CagriNo" class="form-label"></label>
+            <input asp-for="CagriNo" class="form-control" />
+            <span asp-validation-for="CagriNo" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="SiraNo" class="form-label"></label>
+            <input asp-for="SiraNo" class="form-control bg-light" readonly />
+            <small class="text-muted">Otomatik atanır</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="CagriTuru" class="form-label"></label>
+            <select asp-for="CagriTuru" class="form-select">
+                <option value="">Seçiniz</option>
+                @foreach (var ct in ViewBag.CallTypes as IEnumerable<CallType> ?? Enumerable.Empty<CallType>())
+                {
+                    <option value="@ct.Name">@ct.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CagriTuru" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="TeknisyenAdi" class="form-label"></label>
+            <input asp-for="TeknisyenAdi" class="form-control" />
+            <span asp-validation-for="TeknisyenAdi" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Tarih" class="form-label"></label>
+            <input asp-for="Tarih" class="form-control" type="date" />
+            <span asp-validation-for="Tarih" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="MevcutCagriSaat" class="form-label"></label>
+            <input asp-for="MevcutCagriSaat" class="form-control" type="time" />
+            <span asp-validation-for="MevcutCagriSaat" class="text-danger"></span>
+        </div>
+    </div>
+    <p class="text-muted small mb-3">Güncellenen tarih, saat ve neden alanları ilk kayıtta zorunlu değildir. Düzenleme sayfasından sonradan eklenebilir.</p>
+    <div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

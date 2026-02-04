@@ -1,0 +1,45 @@
+# Build / publish
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+*.rsuser
+*.userprefs
+
+# Rider
+.idea/
+*.sln.iml
+
+# .NET
+project.lock.json
+project.fragment.lock.json
+artifacts/
+*.nupkg
+*.snupkg
+**/packages/
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+
+# Installer build artifacts
+CallTrackMVP.Installer/_payload/
+CallTrackMVP.Installer/payload.zip
+CallTrackMVP.Installer/bin/
+CallTrackMVP.Installer/obj/
+CallTrackMVP_Setup.exe
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
