@@ -5,36 +5,40 @@
     var currentUserId = (int)(ViewBag.CurrentUserId ?? 0);
     var isSelf = Model.Id == currentUserId;
 }
-<h1 class="mb-4 text-danger">Kullanıcı Sil</h1>
+<h1 class="page-title text-danger">Kullanıcı Sil</h1>
 @if (isSelf)
 {
-    <div class="alert alert-warning">Kendinizi silemezsiniz.</div>
+    <div class="alert alert-warning" role="alert">Kendinizi silemezsiniz.</div>
 }
 else if (!canDelete)
 {
-    <div class="alert alert-warning">Bu kullanıcının @Model.CallLogs?.Count çağrı kaydı var. Silmek için önce kayıtları silmeniz veya başka kullanıcıya atamanız gerekir.</div>
+    <div class="alert alert-warning" role="alert">Bu kullanıcının @Model.CallLogs?.Count çağrı kaydı var. Silmek için önce kayıtları silmeniz veya başka kullanıcıya atamanız gerekir.</div>
 }
 else
 {
-    <div class="alert alert-warning">Bu kullanıcıyı silmek istediğinizden emin misiniz?</div>
+    <div class="alert alert-warning" role="alert">Bu kullanıcıyı silmek istediğinizden emin misiniz?</div>
 }
-<dl class="row">
-    <dt class="col-sm-3">Kullanıcı Adı</dt>
-    <dd class="col-sm-9">@Model.UserName</dd>
-    <dt class="col-sm-3">Ad Soyad</dt>
-    <dd class="col-sm-9">@Model.FullName</dd>
-    <dt class="col-sm-3">Rol</dt>
-    <dd class="col-sm-9">@Model.Role</dd>
-</dl>
+<div class="detail-list mb-4">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Kullanıcı Adı</dt>
+        <dd class="col-sm-9">@Model.UserName</dd>
+        <dt class="col-sm-3">Ad Soyad</dt>
+        <dd class="col-sm-9">@Model.FullName</dd>
+        <dt class="col-sm-3">Rol</dt>
+        <dd class="col-sm-9">@Model.Role</dd>
+    </dl>
+</div>
 @if (canDelete && !isSelf)
 {
     <form asp-action="DeleteUser" asp-route-id="@Model.Id" method="post">
         @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-danger">Evet, Sil</button>
-        <a asp-action="Users" class="btn btn-secondary">İptal</a>
+        <div class="form-actions border-0 pt-0">
+            <button type="submit" class="btn btn-danger">Evet, Sil</button>
+            <a asp-action="Users" class="btn btn-outline-secondary">İptal</a>
+        </div>
     </form>
 }
 else
 {
-    <a asp-action="Users" class="btn btn-secondary">Geri Dön</a>
+    <a asp-action="Users" class="btn btn-outline-secondary">Geri Dön</a>
 }

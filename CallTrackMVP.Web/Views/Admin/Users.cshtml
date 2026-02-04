@@ -3,54 +3,63 @@
     ViewData["Title"] = "Kullanıcı Yönetimi";
 }
 <div class="admin-header px-4">
-    <h1>👥 Kullanıcı Yönetimi</h1>
+    <h1><i class="bi bi-people me-2" aria-hidden="true"></i>Kullanıcı Yönetimi</h1>
     <p class="mb-0 opacity-75 small">Sistem kullanıcılarını yönetin</p>
 </div>
 @if (TempData["Success"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
     </div>
 }
 @if (TempData["Error"] != null)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         @TempData["Error"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Kapat"></button>
     </div>
 }
-<p class="mb-4">
-    <a asp-action="CreateUser" class="btn btn-ct-primary">+ Yeni Kullanıcı</a>
-    <a asp-action="CallTypes" class="btn btn-outline-secondary ms-2">Çağrı Türleri</a>
-    <a asp-action="Reports" class="btn btn-outline-secondary ms-2">Raporlar</a>
-</p>
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a asp-action="CreateUser" class="btn btn-ct-primary" aria-label="Yeni kullanıcı">
+        <i class="bi bi-person-plus me-1" aria-hidden="true"></i>Yeni Kullanıcı
+    </a>
+    <a asp-action="CallTypes" class="btn btn-outline-secondary">Çağrı Türleri</a>
+    <a asp-action="Reports" class="btn btn-outline-secondary">Raporlar</a>
+</div>
 <div class="admin-card card">
     <div class="table-responsive">
         <table class="table admin-table mb-0">
             <thead>
-            <tr>
-                <th>Kullanıcı Adı</th>
-                <th>Ad Soyad</th>
-                <th>Rol</th>
-                <th>Çağrı Sayısı</th>
-                <th>İşlemler</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var u in Model)
-            {
                 <tr>
-                    <td>@u.UserName</td>
-                    <td>@u.FullName</td>
-                    <td><span class="badge @(u.Role == "Admin" ? "bg-danger" : "bg-secondary")">@u.Role</span></td>
-                    <td>@u.CallLogCount</td>
-                    <td>
-                        <a asp-action="DeleteUser" asp-route-id="@u.Id" class="btn btn-sm btn-outline-danger">Sil</a>
-                    </td>
+                    <th>Kullanıcı Adı</th>
+                    <th>Ad Soyad</th>
+                    <th>Rol</th>
+                    <th>Çağrı Sayısı</th>
+                    <th>İşlemler</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var u in Model)
+                {
+                    <tr>
+                        <td>@u.UserName</td>
+                        <td>@u.FullName</td>
+                        <td><span class="badge @(u.Role == "Admin" ? "bg-danger" : "bg-secondary")">@u.Role</span></td>
+                        <td>@u.CallLogCount</td>
+                        <td>
+                            <a asp-action="DeleteUser" asp-route-id="@u.Id" class="btn btn-sm btn-outline-danger" aria-label="Kullanıcıyı sil">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
+@if (!Model.Any())
+{
+    <div class="empty-state mt-4">
+        <p>Henüz kullanıcı yok. Yeni kullanıcı ekleyebilirsiniz.</p>
+        <a asp-action="CreateUser" class="btn btn-ct-primary">Yeni Kullanıcı</a>
+    </div>
+}
